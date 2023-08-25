@@ -13,34 +13,28 @@ import static com.codeborne.selenide.Selenide.open;
 import static io.qameta.allure.Allure.step;
 import static org.openqa.selenium.By.linkText;
 
+@Feature("Issue in repository")
+@Owner("KaiZerg")
 public class StepsTest {
     private static final String REPOSITORY = "KaiZerg/qa-guru-allure";
     private static final String ISSUE = "Test";
 
     @Test
     @DisplayName("Test with use of Lambda and steps")
-    @Feature("Issue in repository")
     @Story("Creating Issue")
-    @Owner("KaiZerg")
     @Severity(SeverityLevel.BLOCKER)
     @Link(value="Testing", url="https://github.com")
     public void testLambdaStep() {
         SelenideLogger.addListener("allure", new AllureSelenide());
 
-        step("Opening main page", () -> {
-            open("https://github.com");
-        });
+        step("Opening main page", () -> open("https://github.com"));
         step("Looking for repository " + REPOSITORY, () -> {
             $(".header-search-button").click();
             $("#query-builder-test").sendKeys(REPOSITORY);
             $("#query-builder-test").submit();
         });
-        step("Click on repository link " + REPOSITORY, () -> {
-            $(linkText(REPOSITORY)).click();
-        });
-        step("Opening tab Issues", () -> {
-            $("#issues-tab").click();
-        });
+        step("Click on repository link " + REPOSITORY, () -> $(linkText(REPOSITORY)).click());
+        step("Opening tab Issues", () -> $("#issues-tab").click());
         step("Checking if the Issue with text is exist " + ISSUE, () -> {
             $(withText(ISSUE)).should(Condition.exist);
         });
